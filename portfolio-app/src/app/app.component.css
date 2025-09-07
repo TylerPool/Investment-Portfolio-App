@@ -1,0 +1,133 @@
+/* General layout */
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1rem;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Card sections */
+  .card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Headings */
+  h1, h2 {
+    margin-bottom: 1rem;
+  }
+ 
+  /* Top Banner */
+  .banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to right, indigo, #333333); /* indigo → dark gray */
+    color: white;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .banner h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .banner-right {
+    font-size: 1rem;
+    opacity: 0.9;
+  } 
+
+  .account-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 12px 0 8px 0;
+  }
+  
+  .account-bar label {
+    font-weight: 600;
+  }
+  
+  .account-bar select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  /* Forms */
+  form .row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+  }
+  
+  form .row label {
+    width: 100px;
+    font-weight: bold;
+  }
+  
+  form .row input {
+    flex: 1;
+    padding: 0.4rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  
+  table th, table td {
+    text-align: left;
+    padding: 0.6rem;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  table th {
+    background-color: #f2f2f2;
+  }
+  
+  /* Positive / negative P&L */
+  .positive {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .negative {
+    color: red;
+    font-weight: bold;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    form .row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    form .row label {
+      width: 100%;
+      margin-bottom: 0.2rem;
+    }
+  }
