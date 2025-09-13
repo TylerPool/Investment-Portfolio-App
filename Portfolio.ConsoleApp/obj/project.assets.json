@@ -101,11 +101,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/tylerpool/Developer/Projects/PortfolioApp2/PortfolioApp/Portfolio.ConsoleApp/Portfolio.ConsoleApp.csproj",
+      "projectUniqueName": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/Portfolio.ConsoleApp/Portfolio.ConsoleApp.csproj",
       "projectName": "Portfolio.ConsoleApp",
-      "projectPath": "/Users/tylerpool/Developer/Projects/PortfolioApp2/PortfolioApp/Portfolio.ConsoleApp/Portfolio.ConsoleApp.csproj",
+      "projectPath": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/Portfolio.ConsoleApp/Portfolio.ConsoleApp.csproj",
       "packagesPath": "/Users/tylerpool/.nuget/packages/",
-      "outputPath": "/Users/tylerpool/Developer/Projects/PortfolioApp2/PortfolioApp/Portfolio.ConsoleApp/obj/",
+      "outputPath": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/Portfolio.ConsoleApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/tylerpool/.nuget/NuGet/NuGet.Config"
@@ -120,8 +120,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/tylerpool/Developer/Projects/PortfolioApp2/PortfolioApp/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj": {
-              "projectPath": "/Users/tylerpool/Developer/Projects/PortfolioApp2/PortfolioApp/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj"
+            "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj": {
+              "projectPath": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj"
             }
           }
         }

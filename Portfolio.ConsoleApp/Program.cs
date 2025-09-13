@@ -11,16 +11,20 @@ namespace Portfolio.ConsoleApp
             Console.WriteLine(Trade.foo());
 
             bool running = true;
+
+            Portfolio.Api.Models.Portfolio dummyPortfolio = new Portfolio.Api.Models.Portfolio("123");
+            dummyPortfolio.PopulateDummyPortfolio();
+
             while (running)
             {
-                Console.WriteLine("\nEnter a command (f = foo, e = exit): ");
+                Console.WriteLine("\nEnter a command (p = print portfolio, e = exit): ");
                 var input = Console.ReadKey(intercept: true).KeyChar;
 
                 if (input == 'e' || input == 'E')
                 {
                     running = false; // exit loop
                 }
-                else if (input == 'f' || input == 'F')
+                else if (input == 'p' || input == 'P')
                 {
                     Console.WriteLine("foo!");
                 }

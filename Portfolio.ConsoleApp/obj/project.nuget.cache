@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vu1qnkCjjxw=",
+  "dgSpecHash": "HQBbEu2CYNc=",
   "success": true,
-  "projectFilePath": "/Users/tylerpool/Developer/Projects/PortfolioApp2/PortfolioApp/Portfolio.ConsoleApp/Portfolio.ConsoleApp.csproj",
+  "projectFilePath": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/Portfolio.ConsoleApp/Portfolio.ConsoleApp.csproj",
   "expectedPackageFiles": [
     "/Users/tylerpool/.nuget/packages/microsoft.aspnetcore.openapi/9.0.6/microsoft.aspnetcore.openapi.9.0.6.nupkg.sha512",
     "/Users/tylerpool/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"

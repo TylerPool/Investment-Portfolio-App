@@ -26,11 +26,11 @@ public class PortfolioStore
 
         if (accountId == 1)
         {
-            results.Add(new Trade { Id = 1001, AccountId = 1, Symbol = "AAPL", Quantity = 30, OpenDate = today, OpenPrice = 100 });
+            results.Add(new Trade(1001,"AAPL",1,30,today,100 ));
         }
         else if (accountId == 2)
         {
-            results.Add(new Trade { Id = 2001, AccountId = 2, Symbol = "TSLA", Quantity = 30, OpenDate = today, OpenPrice = 200 });
+            results.Add(new Trade(1001,"TSLA",1,30,today,100 ));
         }
 
         results.AddRange(_trades.Where(t => t.AccountId == accountId));

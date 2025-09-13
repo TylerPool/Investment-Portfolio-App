@@ -1,3 +1,14 @@
+  export interface Portfolio {
+    id: string
+    accounts?: Account[];
+  }
+  
+  export interface Account {
+    id: number;
+    name: string;
+    trades?: Trade[];
+  }
+
 export interface Trade {
     id?: number;
     symbol: string;
@@ -19,11 +30,6 @@ export interface Trade {
   }
 
   export interface User {
-    id: number;
-    name: string;
-  }
-
-  export interface Account {
     id: number;
     name: string;
   }
