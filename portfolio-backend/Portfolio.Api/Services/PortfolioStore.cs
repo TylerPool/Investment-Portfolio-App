@@ -16,6 +16,15 @@ public class PortfolioStore
         ["TSLA"] = 265.75
     };
 
+    public Portfolio.Api.Models.Portfolio GetPortfolio(string id)
+    {
+        // for now always populate with the dummy profile for testing. 
+        // soon to be replaced with lookiup via CSV and eventually SQL table.
+        Portfolio.Api.Models.Portfolio dummyPortfolio = new Portfolio.Api.Models.Portfolio("P-001");
+        dummyPortfolio.PopulateDummyPortfolio();
+        return dummyPortfolio;
+    }
+
     public IEnumerable<Trade> GetTrades() => _trades;
 
     // Trades by account: include static demo rows + any added trades for that account

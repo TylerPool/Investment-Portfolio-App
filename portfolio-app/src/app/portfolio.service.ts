@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { Trade, Position, Account } from './models';
+import { Observable, of, map } from 'rxjs';
+import { Trade, Position, Account, Portfolio } from './models';
 
 @Injectable({ providedIn: 'root' })
 export class PortfolioService {
@@ -40,5 +40,11 @@ export class PortfolioService {
       { id: 2, name: 'Brokerage Account' }
     ];
     return of(accounts);
+  }
+
+  getPortfolio(): Observable<Portfolio> {
+    return this.getAccounts().pipe(
+      map((accounts) => ({ id: 'P-001', accounts }))
+    );
   }
 }

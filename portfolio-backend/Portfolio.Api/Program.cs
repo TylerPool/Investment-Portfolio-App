@@ -50,6 +50,11 @@ app.MapGet("/api/quotes/{symbol}", (PortfolioStore store, string symbol) =>
     return price is null ? Results.NotFound() : Results.Ok(new { symbol = symbol.ToUpperInvariant(), price });
 });
 
+app.MapGet("/api/portfolio/{id}",(PortfolioStore store, string id) =>
+{
+    var portfolio = store.GetPortfolio(id);
+    return portfolio is null ? Results.NotFound() : Results.Ok(portfolio);
+});
 
 app.Run("http://localhost:5200");
 

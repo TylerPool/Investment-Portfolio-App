@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PortfolioService } from './portfolio.service';
-import { Position, Trade, User, Account } from './models';
+import { Position, Trade, User, Account, Portfolio } from './models';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
     id: 1234,
     name: 'Alice Smith'
   });  
+  portfolio = signal<Portfolio>({id: "P-001"});
   accounts = signal<Account[]>([]);
   selectedAccountId = signal<number | null>(null);
 
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.loadAccounts();
+    this.loadPortfolioById("P-001");
     this.refresh();
   }
 
@@ -109,6 +111,13 @@ export class AppComponent implements OnInit {
     this.svc.getTradesByAccount(id).subscribe({
       next: ts => this.trades.set(ts),
       error: e => this.error.set(e.message)
+    });
+  }
+
+  private loadPortfolioById(id: string){
+    this.svc.getPortfolio().subscribe({
+      next: (p) => this.portfolio.set(p),
+      error: (e) => this.error.set(e.message)
     });
   }
 }

@@ -3,7 +3,7 @@
     max-width: 900px;
     margin: 2rem auto;
     padding: 1rem;
-    font-family: Arial, sans-serif;
+    font-family: Helvetica, sans-serif;
   }
   
   /* Card sections */
@@ -28,6 +28,7 @@
     background: linear-gradient(to right, indigo, #333333); /* indigo → dark gray */
     color: white;
     padding: 12px 24px;
+    font: Arial;
     font-size: 1.2rem;
     font-weight: bold;
   }
@@ -46,6 +47,11 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    margin: 12px 0 8px 0;
+  }
+
+  /* Portfolio section */
+  .portfolio-section {
     margin: 12px 0 8px 0;
   }
   
