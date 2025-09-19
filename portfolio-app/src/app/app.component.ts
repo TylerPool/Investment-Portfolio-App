@@ -45,13 +45,19 @@ export class AppComponent implements OnInit {
   loadAccounts() {
     this.svc.getAccounts().subscribe({
       next: (accts) => {
-        this.accounts.set(accts);
+        const accountsWithTrades = accts.map(account => ({
+          ...account,
+          trades: account.trades ?? []
+        }));
+
+        this.accounts.set(accountsWithTrades);
         // default to first account if none selected yet
-        if (accts.length && this.selectedAccountId() == null) {
-          this.selectedAccountId.set(accts[0].id);
-          // load trades for default account
-          this.loadTradesForSelectedAccount();
+        if (accountsWithTrades.length && this.selectedAccountId() == null) {
+          this.selectedAccountId.set(accountsWithTrades[0].id);
         }
+
+        // Synchronize trades with the selected account
+        this.loadTradesForSelectedAccount();
       },
       error: (e) => this.error.set(e.message)
     });
@@ -69,49 +75,92 @@ export class AppComponent implements OnInit {
     this.loading.set(true);
     this.svc.getPositions().subscribe({
       next: pos => this.positions.set(pos),
-      error: e => this.error.set(e.message)
-    });
-
-    const accountId = this.selectedAccountId();
-    const trades$ = accountId != null
-      ? this.svc.getTradesByAccount(accountId)
-      : this.svc.getTrades();
-
-    trades$.subscribe({
-      next: ts => this.trades.set(ts),
       error: e => this.error.set(e.message),
       complete: () => this.loading.set(false)
     });
+
+    this.loadTradesForSelectedAccount();
   }
 
   addTrade() {
     this.error.set(null);
+    const accountId = this.selectedAccountId();
+    if (accountId == null) {
+      this.error.set('Please select an account before adding a trade.');
+      return;
+    }
+
     const t: Trade = {
       ...this.newTrade,
+      id: this.getNextTradeId(),
       symbol: this.newTrade.symbol.trim().toUpperCase(),
-      accountId: this.selectedAccountId() ?? undefined
+      accountId
     };
-    this.svc.addTrade(t).subscribe({
-      next: _ => {
-        this.newTrade = { symbol: 'AAPL', quantity: 10, openDate: new Date().toISOString().slice(0,10), openPrice: 100 };
-        this.refresh();
-      },
-      error: e => this.error.set(e.message)
-    });
+
+    const accounts = this.accounts();
+    const targetIndex = accounts.findIndex(a => a.id === accountId);
+    if (targetIndex === -1) {
+      this.error.set('Selected account could not be found.');
+      return;
+    }
+
+    const targetAccount = accounts[targetIndex];
+    const updatedAccount: Account = {
+      ...targetAccount,
+      trades: [...(targetAccount.trades ?? []), t]
+    };
+
+    const updatedAccounts = [...accounts];
+    updatedAccounts[targetIndex] = updatedAccount;
+    this.accounts.set(updatedAccounts);
+    this.loadTradesForSelectedAccount();
+
+    this.newTrade = { symbol: 'AAPL', quantity: 10, openDate: new Date().toISOString().slice(0,10), openPrice: 100 };
   }
 
   removeTrade(id?: number) {
-    if (!id) return;
-    this.svc.deleteTrade(id).subscribe({ next: () => this.refresh() });
+    if (id == null) {
+      return;
+    }
+
+    const accountId = this.selectedAccountId();
+    if (accountId == null) {
+      return;
+    }
+
+    const accounts = this.accounts();
+    const targetIndex = accounts.findIndex(a => a.id === accountId);
+    if (targetIndex === -1) {
+      return;
+    }
+
+    const targetAccount = accounts[targetIndex];
+    const existingTrades = targetAccount.trades ?? [];
+    const filteredTrades = existingTrades.filter(t => t.id !== id);
+    if (filteredTrades.length === existingTrades.length) {
+      return;
+    }
+
+    const updatedAccount: Account = {
+      ...targetAccount,
+      trades: filteredTrades
+    };
+
+    const updatedAccounts = [...accounts];
+    updatedAccounts[targetIndex] = updatedAccount;
+    this.accounts.set(updatedAccounts);
+    this.loadTradesForSelectedAccount();
   }
 
   private loadTradesForSelectedAccount() {
     const id = this.selectedAccountId();
-    if (id == null) return;
-    this.svc.getTradesByAccount(id).subscribe({
-      next: ts => this.trades.set(ts),
-      error: e => this.error.set(e.message)
-    });
+    if (id == null) {
+      this.trades.set([]);
+      return;
+    }
+
+    const account = this.accounts().find(a => a.id === id);
+    this.trades.set(account?.trades ? [...account.trades] : []);
   }
 
   private loadPortfolioById(id: string){
@@ -119,5 +168,18 @@ export class AppComponent implements OnInit {
       next: (p) => this.portfolio.set(p),
       error: (e) => this.error.set(e.message)
     });
+  }
+
+  private getNextTradeId(): number {
+    const accounts = this.accounts();
+    let maxId = 0;
+    for (const account of accounts) {
+      for (const trade of account.trades ?? []) {
+        if (typeof trade.id === 'number' && trade.id > maxId) {
+          maxId = trade.id;
+        }
+      }
+    }
+    return maxId + 1;
   }
 }

@@ -1,3 +1,4 @@
+
 using Portfolio.Api.Models;
 
 namespace Portfolio.Api.Services;
@@ -6,8 +7,10 @@ public class PortfolioStore
 {
     private readonly List<Trade> _trades = new();
     private int _nextId = 1;
+    private readonly string accountFilePath = "/Users/tyler";
 
-    private readonly Dictionary<string,double> _mockQuotes = new(StringComparer.OrdinalIgnoreCase)
+
+    private readonly Dictionary<string, double> _mockQuotes = new(StringComparer.OrdinalIgnoreCase)
     {
         ["AAPL"] = 230.10,
         ["MSFT"] = 452.55,
@@ -35,11 +38,11 @@ public class PortfolioStore
 
         if (accountId == 1)
         {
-            results.Add(new Trade(1001,"AAPL",1,30,today,100 ));
+            results.Add(new Trade(1001, "AAPL", 1, 30, today, 100));
         }
         else if (accountId == 2)
         {
-            results.Add(new Trade(1001,"TSLA",1,30,today,100 ));
+            results.Add(new Trade(1001, "TSLA", 1, 30, today, 100));
         }
 
         results.AddRange(_trades.Where(t => t.AccountId == accountId));
@@ -81,4 +84,11 @@ public class PortfolioStore
             };
         }
     }
+
+    public void SaveAccount(Account account)
+    {
+        string filePath = accountFilePath;
+        account.Save(filePath);
+    }
+
 }
