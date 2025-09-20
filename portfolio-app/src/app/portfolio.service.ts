@@ -42,6 +42,12 @@ export class PortfolioService {
     return of(accounts);
   }
 
+  saveAccount(account: Account): Observable<Account> {
+    return this.http
+      .post<void>(`${this.base}/accounts`, account)
+      .pipe(map(() => account));
+  }
+
   getPortfolio(): Observable<Portfolio> {
     return this.getAccounts().pipe(
       map((accounts) => ({ id: 'P-001', accounts }))

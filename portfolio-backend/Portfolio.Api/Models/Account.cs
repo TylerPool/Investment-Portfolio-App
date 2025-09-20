@@ -1,3 +1,8 @@
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+
 namespace Portfolio.Api.Models;
 
 public enum AccountType
@@ -15,6 +20,50 @@ public class Account
     {
         this.Id = id;
         this.AccountType = accountType;
+    }
+    public void Save(string filePath)
+    {
+        if (string.IsNullOrWhiteSpace(filePath))
+        {
+            throw new ArgumentException("File path must be provided.", nameof(filePath));
+        }
+        string fileName = filePath + "/Account_" + Id + ".xml"; 
+
+
+        var directory = Path.GetDirectoryName(fileName);
+        if (!string.IsNullOrWhiteSpace(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        var tradesElement = new XElement("Trades",
+            (Trades ?? new List<Trade>()).Select(trade => new XElement("Trade",
+                new XElement("Id", trade.Id),
+                new XElement("Symbol", trade.Symbol ?? string.Empty),
+                new XElement("AccountId", trade.AccountId),
+                new XElement("Quantity", trade.Quantity),
+                new XElement("OpenDate", trade.OpenDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)),
+                new XElement("OpenPrice", trade.OpenPrice.ToString(CultureInfo.InvariantCulture)),
+                new XElement("CloseDate", trade.CloseDate.HasValue
+                    ? trade.CloseDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+                    : string.Empty),
+                new XElement("ClosePrice", trade.ClosePrice.HasValue
+                    ? trade.ClosePrice.Value.ToString(CultureInfo.InvariantCulture)
+                    : string.Empty)
+            ))
+        );
+
+        var document = new XDocument(
+            new XDeclaration("1.0", "utf-8", "yes"),
+            new XElement("Account",
+                new XElement("Id", Id ?? string.Empty),
+                new XElement("AccountType", AccountType.ToString()),
+                new XElement("Cash", Cash.ToString(CultureInfo.InvariantCulture)),
+                tradesElement
+            )
+        );
+
+        document.Save(fileName);
     }
     public override string ToString()
     {

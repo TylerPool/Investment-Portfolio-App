@@ -1,3 +1,4 @@
+using Portfolio.Api.Contracts;
 using Portfolio.Api.Models;
 using Portfolio.Api.Services;
 
@@ -43,6 +44,19 @@ app.MapDelete("/api/trades/{id:int}", (PortfolioStore store, int id) =>
     store.DeleteTrade(id) ? Results.NoContent() : Results.NotFound());
 
 app.MapGet("/api/positions", (PortfolioStore store) => Results.Ok(store.GetPositions()));
+
+app.MapPost("/api/accounts", (PortfolioStore store, AccountDto accountDto) =>
+{
+    var account = accountDto.ToModel();
+    store.SaveAccount(account);
+    return Results.Accepted();
+});
+
+app.MapPost("/api/accounts/test", (PortfolioStore store) =>
+{
+    store.SaveAccountTest();
+    return Results.Accepted();
+});
 
 app.MapGet("/api/quotes/{symbol}", (PortfolioStore store, string symbol) =>
 {

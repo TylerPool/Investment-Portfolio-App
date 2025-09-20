@@ -152,6 +152,27 @@ export class AppComponent implements OnInit {
     this.loadTradesForSelectedAccount();
   }
 
+  saveSelectedAccount() {
+    const accountId = this.selectedAccountId();
+    if (accountId == null) {
+      this.error.set('Please select an account before saving.');
+      return;
+    }
+
+    const account = this.accounts().find(a => a.id === accountId);
+    if (!account) {
+      this.error.set('Selected account could not be found.');
+      return;
+    }
+
+    this.svc.saveAccount(account).subscribe({
+      next: () => {
+        // no-op for now; could show toast/snackbar later
+      },
+      error: (e) => this.error.set(e.message)
+    });
+  }
+
   private loadTradesForSelectedAccount() {
     const id = this.selectedAccountId();
     if (id == null) {

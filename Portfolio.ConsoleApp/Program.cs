@@ -14,6 +14,7 @@ namespace Portfolio.ConsoleApp
 
             Portfolio.Api.Models.Portfolio dummyPortfolio = new Portfolio.Api.Models.Portfolio("123");
             dummyPortfolio.PopulateDummyPortfolio();
+            dummyPortfolio.Accounts[0].Save("/Users/tylerpool/developer");
 
             while (running)
             {

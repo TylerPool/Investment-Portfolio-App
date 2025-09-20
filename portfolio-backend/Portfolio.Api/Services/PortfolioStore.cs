@@ -87,8 +87,12 @@ public class PortfolioStore
 
     public void SaveAccount(Account account)
     {
-        string filePath = accountFilePath;
-        account.Save(filePath);
+        account.Save("/Users/tylerpool/developer");
+    }
+    public void SaveAccountTest()
+    {
+        Portfolio.Api.Models.Portfolio dummyPortfolio = GetPortfolio("1");
+        dummyPortfolio.Accounts[0].Save("/Users/tylerpool/developer");
     }
 
 }

@@ -75,19 +75,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/tyler/.nuget/packages/": {}
+    "/Users/tylerpool/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/tyler/Developer/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj",
+      "projectUniqueName": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj",
       "projectName": "Portfolio.Api",
-      "projectPath": "/Users/tyler/Developer/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj",
-      "packagesPath": "/Users/tyler/.nuget/packages/",
-      "outputPath": "/Users/tyler/Developer/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/obj/",
+      "projectPath": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj",
+      "packagesPath": "/Users/tylerpool/.nuget/packages/",
+      "outputPath": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/tyler/.nuget/NuGet/NuGet.Config"
+        "/Users/tylerpool/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -111,7 +111,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -141,7 +141,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.301/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

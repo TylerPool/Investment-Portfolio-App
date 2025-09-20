@@ -1,0 +1,24 @@
+<section class="login-card">
+  <h1>Welcome Back</h1>
+  <form (ngSubmit)="submit()" #loginForm="ngForm">
+    <label for="username">User Name</label>
+    <input
+      id="username"
+      name="username"
+      type="text"
+      [(ngModel)]="username"
+      required
+    />
+
+    <label for="password">Password</label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      [(ngModel)]="password"
+      required
+    />
+
+    <button type="submit" [disabled]="loginForm.invalid">Sign In</button>
+  </form>
+</section>
