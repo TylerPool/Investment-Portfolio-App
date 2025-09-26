@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 namespace Portfolio.Api.Models;
@@ -16,26 +17,22 @@ public class Account
     public AccountType AccountType { get; set; }
     public decimal Cash { get; set; } = 0;
     public List<Trade> Trades { get; set; } = new List<Trade>();
+    const string ACCOUNT_FILE_PATH = "/Users/tyler/Developer/files/accounts";
     public Account(string id, AccountType accountType)
     {
         this.Id = id;
         this.AccountType = accountType;
     }
-    public void Save(string filePath)
+    public Account(string id) { Id = id; }
+    public void Save()
     {
-        if (string.IsNullOrWhiteSpace(filePath))
-        {
-            throw new ArgumentException("File path must be provided.", nameof(filePath));
-        }
-        string fileName = filePath + "/Account_" + Id + ".xml"; 
-
-
+        // Early solution for saving results. Someday replaced with DB call
+        string fileName = ACCOUNT_FILE_PATH + "/" + Id + ".xml";
         var directory = Path.GetDirectoryName(fileName);
         if (!string.IsNullOrWhiteSpace(directory))
         {
             Directory.CreateDirectory(directory);
         }
-
         var tradesElement = new XElement("Trades",
             (Trades ?? new List<Trade>()).Select(trade => new XElement("Trade",
                 new XElement("Id", trade.Id),
@@ -52,7 +49,6 @@ public class Account
                     : string.Empty)
             ))
         );
-
         var document = new XDocument(
             new XDeclaration("1.0", "utf-8", "yes"),
             new XElement("Account",
@@ -62,8 +58,12 @@ public class Account
                 tradesElement
             )
         );
-
         document.Save(fileName);
+    }
+
+    public void Load()
+    {
+
     }
     public override string ToString()
     {

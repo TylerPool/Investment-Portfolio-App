@@ -4,15 +4,15 @@
   }
   
   export interface Account {
-    id: number;
+    id: string;
     name: string;
     trades?: Trade[];
   }
 
-export interface Trade {
+  export interface Trade {
     id?: number;
     symbol: string;
-    accountId?: number;
+    accountId?: string;
     quantity: number;
     openDate: string;   // ISO date string (YYYY-MM-DD)
     openPrice: number;

@@ -96,19 +96,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/tylerpool/.nuget/packages/": {}
+    "/Users/tyler/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/Portfolio.ConsoleApp/Portfolio.ConsoleApp.csproj",
+      "projectUniqueName": "/Users/tyler/Developer/Investment-Portfolio-App/Portfolio.ConsoleApp/Portfolio.ConsoleApp.csproj",
       "projectName": "Portfolio.ConsoleApp",
-      "projectPath": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/Portfolio.ConsoleApp/Portfolio.ConsoleApp.csproj",
-      "packagesPath": "/Users/tylerpool/.nuget/packages/",
-      "outputPath": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/Portfolio.ConsoleApp/obj/",
+      "projectPath": "/Users/tyler/Developer/Investment-Portfolio-App/Portfolio.ConsoleApp/Portfolio.ConsoleApp.csproj",
+      "packagesPath": "/Users/tyler/.nuget/packages/",
+      "outputPath": "/Users/tyler/Developer/Investment-Portfolio-App/Portfolio.ConsoleApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/tylerpool/.nuget/NuGet/NuGet.Config"
+        "/Users/tyler/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -120,8 +120,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj": {
-              "projectPath": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj"
+            "/Users/tyler/Developer/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj": {
+              "projectPath": "/Users/tyler/Developer/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj"
             }
           }
         }
@@ -136,7 +136,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net9.0": {
@@ -157,7 +157,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

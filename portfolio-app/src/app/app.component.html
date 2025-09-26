@@ -7,21 +7,11 @@
   </div>
 </div>
 
-<section class="portfolio-section card">
-  <h2>Portfolio</h2>
-  <div>Id: {{ portfolio().id }}</div>
-  </section>
-
-<div class="account-bar">
-  <label for="account">Account</label>
-  <select id="account"
-          [ngModel]="selectedAccountId()"
-          (ngModelChange)="onAccountChanged($event)">
-    <option *ngFor="let a of accounts()" [value]="a.id">
-      {{ a.name }} (ID: {{ a.id }})
-    </option>
-  </select>
-</div>
+<app-portfolio-summary class="card"
+                       [portfolio]="portfolio()"
+                       [selectedAccountId]="selectedAccountId() !== null ? selectedAccountId() : null"
+                       (selectedAccountIdChange)="onAccountChanged($event === null ? null : $event.toString())">
+</app-portfolio-summary>
 
 <div class="container">
 
@@ -48,61 +38,10 @@
       </form>
     </section>
   
-    <section class="card">
-      <h2>Positions</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Symbol</th>
-            <th>Qty</th>
-            <th>Avg Cost</th>
-            <th>Price</th>
-            <th>Value</th>
-            <th>Unrealized P/L</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let p of positions()">
-            <td>{{ p.symbol }}</td>
-            <td>{{ p.quantity }}</td>
-            <td>{{ p.avgCost | number:'1.2-2' }}</td>
-            <td>{{ p.marketPrice ?? '-' }}</td>
-            <td>{{ p.marketValue ?? '-' }}</td>
-            <td [class.positive]="p.unrealizedPnL >= 0" [class.negative]="p.unrealizedPnL < 0">
-              {{ p.unrealizedPnL | number:'1.2-2' }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  
-    <section class="card">
-      <h2>Trades</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Symbol</th>
-            <th>Qty</th>
-            <th>Date</th>
-            <th>Price</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let t of trades()">
-            <td>{{ t.id }}</td>
-            <td>{{ t.symbol }}</td>
-            <td>{{ t.quantity }}</td>
-            <td>{{ t.openDate }}</td>
-            <td>{{ t.openPrice | number:'1.2-2' }}</td>
-            <td>
-              <button type="button" (click)="removeTrade(t.id)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <app-account-unrealized
+      [account]="selectedAccount()"
+      (removeTrade)="removeTrade($event)">
+    </app-account-unrealized>
   </div>
 
   <div class="save-actions">

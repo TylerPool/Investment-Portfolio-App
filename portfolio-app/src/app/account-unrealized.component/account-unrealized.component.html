@@ -1,0 +1,67 @@
+<section class="card">
+  <h2>Positions</h2>
+  <ng-container *ngIf="positions.length; else noPositions">
+    <table>
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Qty</th>
+          <th>Avg Cost</th>
+          <th>Price</th>
+          <th>Value</th>
+          <th>Unrealized P/L</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let position of positions">
+          <td>{{ position.symbol }}</td>
+          <td>{{ position.quantity }}</td>
+          <td>{{ position.avgCost | number: '1.2-2' }}</td>
+          <td>{{ position.marketPrice ?? '-' }}</td>
+          <td>{{ position.marketValue ?? '-' }}</td>
+          <td [class.positive]="position.unrealizedPnL >= 0" [class.negative]="position.unrealizedPnL < 0">
+            {{ position.unrealizedPnL | number: '1.2-2' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+</section>
+
+<section class="card">
+  <h2>Lot Details</h2>
+  <ng-container *ngIf="lotDetails.length; else noLots">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Symbol</th>
+          <th>Qty</th>
+          <th>Date</th>
+          <th>Price</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let trade of lotDetails">
+          <td>{{ trade.id ?? '-' }}</td>
+          <td>{{ trade.symbol }}</td>
+          <td>{{ trade.quantity }}</td>
+          <td>{{ trade.openDate }}</td>
+          <td>{{ trade.openPrice | number: '1.2-2' }}</td>
+          <td>
+            <button type="button" (click)="removeTrade.emit(trade.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+</section>
+
+<ng-template #noPositions>
+  <div class="empty-state">No positions available.</div>
+</ng-template>
+
+<ng-template #noLots>
+  <div class="empty-state">No lot details available.</div>
+</ng-template>

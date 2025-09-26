@@ -1,33 +1,44 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { PortfolioService } from './portfolio.service';
 import { Position, Trade, User, Account, Portfolio } from './models';
+import { PortfolioSummary } from './portfolio-summary/portfolio-summary.component';
+import { AccountUnrealizedComponent } from './account-unrealized.component/account-unrealized.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PortfolioSummary, AccountUnrealizedComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
   private svc = inject(PortfolioService);
-
+  //for now populate with some dummy user and portfolio data.
+  //later replace with login screen
   user = signal<User>({
     id: 1234,
     name: 'Alice Smith'
   });  
-  portfolio = signal<Portfolio>({id: "P-001"});
+  portfolio = signal<Portfolio>({
+    id: "P-001"
+    });
   accounts = signal<Account[]>([]);
-  selectedAccountId = signal<number | null>(null);
+  selectedAccountId = signal<string | null>(null);
+  selectedAccount = computed(() => {
+    const id = this.selectedAccountId();
+    if (id == null) {
+      return null;
+    }
 
+    return this.accounts().find((account) => account.id === id) ?? null;
+  });
   positions = signal<Position[]>([]);
-  trades = signal<Trade[]>([]);
-  
+  trades = signal<Trade[]>([]);  
   loading = signal(false);
   error = signal<string | null>(null);
-
 
   newTrade: Trade = {
     symbol: 'AAPL',
@@ -36,50 +47,106 @@ export class AppComponent implements OnInit {
     openPrice: 100
   };
 
+  //#region App Methods
   ngOnInit() {
-    this.loadAccounts();
-    this.loadPortfolioById("P-001");
+    // For now, load dummy portfolio by default
+    this.loadPortfolio();
     this.refresh();
   }
 
-  loadAccounts() {
-    this.svc.getAccounts().subscribe({
-      next: (accts) => {
-        const accountsWithTrades = accts.map(account => ({
-          ...account,
-          trades: account.trades ?? []
+  refresh() {
+    this.loading.set(true);
+    this.updatePositions();
+    this.loading.set(false);
+  }
+  //#endregion
+  
+  //#region Portfolio and Account Methods
+  private loadPortfolio(){
+    forkJoin([
+      this.svc.getAccount('1'),
+      this.svc.getAccount('2')
+    ]).subscribe({
+      next: (accounts) => {
+        this.accounts.set(accounts);
+        this.portfolio.update((current) => ({
+          ...current,
+          accounts
         }));
 
-        this.accounts.set(accountsWithTrades);
-        // default to first account if none selected yet
-        if (accountsWithTrades.length && this.selectedAccountId() == null) {
-          this.selectedAccountId.set(accountsWithTrades[0].id);
-        }
+        const parsedId = accounts[0]?.id != null ? accounts[0].id : null;
+        this.onAccountChanged(parsedId);
+      },
+      error: (e) => {
+        const message = e instanceof Error ? e.message : 'Failed to load accounts';
+        this.error.set(message);
+      }
+    });
+  }
 
-        // Synchronize trades with the selected account
-        this.loadTradesForSelectedAccount();
+  onAccountChanged(id: string | null) {
+    this.selectedAccountId.set(id);
+    this.updatePositions();
+  }  
+
+  saveSelectedAccount() {
+    const accountId = this.selectedAccountId();
+    if (accountId == null) {
+      this.error.set('Please select an account before saving.');
+      return;
+    }
+
+    const account = this.accounts().find(a => a.id === accountId);
+    if (!account) {
+      this.error.set('Selected account could not be found.');
+      return;
+    }
+
+    this.svc.saveAccount(account).subscribe({
+      next: () => {
+        // no-op for now
       },
       error: (e) => this.error.set(e.message)
     });
   }
 
-  onAccountChanged(val: string | number) {
-    // <select> emits strings; coerce to number for safety
-    const id = typeof val === 'string' ? parseInt(val, 10) : val;
-    this.selectedAccountId.set(id);
-    // Load trades specific to the selected account
-    this.loadTradesForSelectedAccount();
-  }
+  //#endregion
 
-  refresh() {
-    this.loading.set(true);
-    this.svc.getPositions().subscribe({
-      next: pos => this.positions.set(pos),
-      error: e => this.error.set(e.message),
-      complete: () => this.loading.set(false)
-    });
+  updatePositions(){
+    const accountId = this.selectedAccountId();
+    if (accountId == null) {
+      this.positions.set([]);
+      return;
+    }
 
-    this.loadTradesForSelectedAccount();
+    const account = this.accounts().find(a => a.id === accountId);
+    const trades = account?.trades ?? [];
+    if (!trades.length) {
+      this.positions.set([]);
+      return;
+    }
+
+    const totals = new Map<string, number>();
+    for (const trade of trades) {
+      const symbol = trade.symbol?.trim().toUpperCase();
+      if (!symbol) {
+        continue;
+      }
+
+      const current = totals.get(symbol) ?? 0;
+      totals.set(symbol, current + (trade.quantity ?? 0));
+    }
+
+    const aggregatedPositions: Position[] = Array.from(totals.entries()).map(([symbol, quantity]) => ({
+      symbol,
+      quantity,
+      avgCost: 0,
+      marketPrice: null,
+      marketValue: null,
+      unrealizedPnL: 0
+    }));
+
+    this.positions.set(aggregatedPositions);
   }
 
   addTrade() {
@@ -113,7 +180,7 @@ export class AppComponent implements OnInit {
     const updatedAccounts = [...accounts];
     updatedAccounts[targetIndex] = updatedAccount;
     this.accounts.set(updatedAccounts);
-    this.loadTradesForSelectedAccount();
+    this.onAccountChanged(accountId);
 
     this.newTrade = { symbol: 'AAPL', quantity: 10, openDate: new Date().toISOString().slice(0,10), openPrice: 100 };
   }
@@ -149,47 +216,20 @@ export class AppComponent implements OnInit {
     const updatedAccounts = [...accounts];
     updatedAccounts[targetIndex] = updatedAccount;
     this.accounts.set(updatedAccounts);
-    this.loadTradesForSelectedAccount();
+    this.onAccountChanged(accountId);
   }
 
-  saveSelectedAccount() {
-    const accountId = this.selectedAccountId();
-    if (accountId == null) {
-      this.error.set('Please select an account before saving.');
-      return;
-    }
 
-    const account = this.accounts().find(a => a.id === accountId);
-    if (!account) {
-      this.error.set('Selected account could not be found.');
-      return;
-    }
+  // private loadTradesForSelectedAccount() {
+  //   const id = this.selectedAccountId();
+  //   if (id == null) {
+  //     this.trades.set([]);
+  //     return;
+  //   }
 
-    this.svc.saveAccount(account).subscribe({
-      next: () => {
-        // no-op for now; could show toast/snackbar later
-      },
-      error: (e) => this.error.set(e.message)
-    });
-  }
-
-  private loadTradesForSelectedAccount() {
-    const id = this.selectedAccountId();
-    if (id == null) {
-      this.trades.set([]);
-      return;
-    }
-
-    const account = this.accounts().find(a => a.id === id);
-    this.trades.set(account?.trades ? [...account.trades] : []);
-  }
-
-  private loadPortfolioById(id: string){
-    this.svc.getPortfolio().subscribe({
-      next: (p) => this.portfolio.set(p),
-      error: (e) => this.error.set(e.message)
-    });
-  }
+  //   const account = this.accounts().find(a => a.id === id);
+  //   this.trades.set(account?.trades ? [...account.trades] : []);
+  // }
 
   private getNextTradeId(): number {
     const accounts = this.accounts();

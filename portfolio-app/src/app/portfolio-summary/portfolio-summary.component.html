@@ -1,0 +1,27 @@
+<section *ngIf="portfolio; else noPortfolio" class="summary-card">
+  <h2>Portfolio Summary</h2>
+
+  <div class="row">
+    <span class="label">Portfolio ID:</span>
+    <span class="value">{{ portfolio.id }}</span>
+  </div>
+
+  <div class="row" *ngIf="accounts.length; else noAccounts">
+    <label for="account-select">Account</label>
+    <select id="account-select"
+            [ngModel]="selectedAccountId"
+            (ngModelChange)="onAccountChange($event)">
+      <option *ngFor="let account of accounts" [ngValue]="account.id">
+        {{ account.name }} (ID: {{ account.id }})
+      </option>
+    </select>
+  </div>
+</section>
+
+<ng-template #noPortfolio>
+  <div class="empty-state">No portfolio selected.</div>
+</ng-template>
+
+<ng-template #noAccounts>
+  <div class="empty-state">No accounts available.</div>
+</ng-template>

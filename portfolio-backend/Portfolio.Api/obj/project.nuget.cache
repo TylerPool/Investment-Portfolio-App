@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "50ClmV17OMc=",
+  "dgSpecHash": "1HVK6zRGgUk=",
   "success": true,
-  "projectFilePath": "/Users/tylerpool/Developer/Projects/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj",
+  "projectFilePath": "/Users/tyler/Developer/Investment-Portfolio-App/portfolio-backend/Portfolio.Api/Portfolio.Api.csproj",
   "expectedPackageFiles": [
-    "/Users/tylerpool/.nuget/packages/microsoft.aspnetcore.openapi/9.0.6/microsoft.aspnetcore.openapi.9.0.6.nupkg.sha512",
-    "/Users/tylerpool/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+    "/Users/tyler/.nuget/packages/microsoft.aspnetcore.openapi/9.0.6/microsoft.aspnetcore.openapi.9.0.6.nupkg.sha512",
+    "/Users/tyler/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
   ],
   "logs": []
 }
