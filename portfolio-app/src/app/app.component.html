@@ -10,7 +10,7 @@
 <app-portfolio-summary class="card"
                        [portfolio]="portfolio()"
                        [selectedAccountId]="selectedAccountId() !== null ? selectedAccountId() : null"
-                       (selectedAccountIdChange)="onAccountChanged($event === null ? null : $event.toString())">
+                       (selectedAccountIdChange)="onAccountChanged($event)">
 </app-portfolio-summary>
 
 <div class="container">

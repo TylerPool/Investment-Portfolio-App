@@ -17,7 +17,7 @@ public class Account
     public AccountType AccountType { get; set; }
     public decimal Cash { get; set; } = 0;
     public List<Trade> Trades { get; set; } = new List<Trade>();
-    const string ACCOUNT_FILE_PATH = "/Users/tyler/Developer/files/accounts";
+    const string ACCOUNT_FILE_PATH = "/Users/tylerpool/Developer/files/accounts";
     public Account(string id, AccountType accountType)
     {
         this.Id = id;
@@ -63,7 +63,88 @@ public class Account
 
     public void Load()
     {
+        string fileName = ACCOUNT_FILE_PATH + "/" + Id + ".xml";
+        if (!File.Exists(fileName))
+        {
+            return;
+        }
 
+        var document = XDocument.Load(fileName);
+        var root = document.Element("Account");
+        if (root is null)
+        {
+            return;
+        }
+
+        var idValue = root.Element("Id")?.Value;
+        if (!string.IsNullOrWhiteSpace(idValue))
+        {
+            Id = idValue;
+        }
+
+        var accountTypeValue = root.Element("AccountType")?.Value;
+        if (!string.IsNullOrWhiteSpace(accountTypeValue))
+        {
+            if (Enum.TryParse<AccountType>(accountTypeValue, true, out var parsedAccountType))
+            {
+                AccountType = parsedAccountType;
+            }
+            else if (int.TryParse(accountTypeValue, out var accountTypeNumeric) && Enum.IsDefined(typeof(AccountType), accountTypeNumeric))
+            {
+                AccountType = (AccountType)accountTypeNumeric;
+            }
+        }
+
+        var cashValue = root.Element("Cash")?.Value;
+        if (!string.IsNullOrWhiteSpace(cashValue)
+            && decimal.TryParse(cashValue, NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out var cash))
+        {
+            Cash = cash;
+        }
+
+        var tradesElement = root.Element("Trades");
+        var trades = new List<Trade>();
+        if (tradesElement is not null)
+        {
+            foreach (var tradeElement in tradesElement.Elements("Trade"))
+            {
+                var tradeIdText = tradeElement.Element("Id")?.Value;
+                var symbol = tradeElement.Element("Symbol")?.Value ?? string.Empty;
+                var accountIdText = tradeElement.Element("AccountId")?.Value;
+                var quantityText = tradeElement.Element("Quantity")?.Value;
+                var openDateText = tradeElement.Element("OpenDate")?.Value;
+                var openPriceText = tradeElement.Element("OpenPrice")?.Value;
+                var closeDateText = tradeElement.Element("CloseDate")?.Value;
+                var closePriceText = tradeElement.Element("ClosePrice")?.Value;
+
+                if (!int.TryParse(tradeIdText, out var tradeId)
+                    || !int.TryParse(accountIdText, out var tradeAccountId)
+                    || !int.TryParse(quantityText, out var quantity)
+                    || !DateOnly.TryParseExact(openDateText, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var openDate)
+                    || !double.TryParse(openPriceText, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var openPrice))
+                {
+                    continue;
+                }
+
+                var trade = new Trade(tradeId, symbol, tradeAccountId, quantity, openDate, openPrice);
+
+                if (!string.IsNullOrWhiteSpace(closeDateText)
+                    && DateOnly.TryParseExact(closeDateText, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var closeDate))
+                {
+                    trade.CloseDate = closeDate;
+                }
+
+                if (!string.IsNullOrWhiteSpace(closePriceText)
+                    && double.TryParse(closePriceText, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var closePrice))
+                {
+                    trade.ClosePrice = closePrice;
+                }
+
+                trades.Add(trade);
+            }
+        }
+
+        Trades = trades;
     }
     public override string ToString()
     {

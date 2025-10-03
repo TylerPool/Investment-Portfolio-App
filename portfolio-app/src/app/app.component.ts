@@ -64,8 +64,8 @@ export class AppComponent implements OnInit {
   //#region Portfolio and Account Methods
   private loadPortfolio(){
     forkJoin([
-      this.svc.getAccount('1'),
-      this.svc.getAccount('2')
+      this.svc.getAccount('001'),
+      this.svc.getAccount('002')
     ]).subscribe({
       next: (accounts) => {
         this.accounts.set(accounts);
@@ -87,6 +87,7 @@ export class AppComponent implements OnInit {
   onAccountChanged(id: string | null) {
     this.selectedAccountId.set(id);
     this.updatePositions();
+    this.refresh();
   }  
 
   saveSelectedAccount() {

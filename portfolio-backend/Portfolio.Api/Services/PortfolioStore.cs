@@ -27,22 +27,26 @@ public class PortfolioStore
     }
     public Account GetAccount(string id)
     {
+        Account account = new Account(id);
+        account.Load();
+        return account;
+
         //place holder method for now that returns dummy accounts
-        Account a = new Account(id);
-        var today = DateOnly.FromDateTime(DateTime.Today);
+        // Account a = new Account(id);
+        // var today = DateOnly.FromDateTime(DateTime.Today);
 
-        if (id == "1")
-        {
-            a.AccountType = AccountType.TaxableBrokerage;
-            a.Trades.Add(new Trade(1001, "AAPL", 1, 30, today, 100));
-        }
-        else if (id == "2")
-        {
-            a.AccountType = AccountType.RothIra;
-            a.Trades.Add(new Trade(1001, "TSLA", 1, 30, today, 100));
-        }
+        // if (id == "1")
+        // {
+        //     a.AccountType = AccountType.TaxableBrokerage;
+        //     a.Trades.Add(new Trade(1001, "AAPL", 1, 30, today, 100));
+        // }
+        // else if (id == "2")
+        // {
+        //     a.AccountType = AccountType.RothIra;
+        //     a.Trades.Add(new Trade(1001, "TSLA", 1, 30, today, 100));
+        // }
 
-        return a;
+        // return a;
     }
 
     public double? GetQuote(string symbol) => _mockQuotes.TryGetValue(symbol, out var p) ? p : null;

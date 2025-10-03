@@ -13,19 +13,18 @@ import { Account, Portfolio } from '../models';
 export class PortfolioSummary {
   @Input() portfolio: Portfolio | null = null;
   @Input() selectedAccountId: string | null = null;
-  @Output() selectedAccountIdChange = new EventEmitter<number | null>();
+  @Output() selectedAccountIdChange = new EventEmitter<string | null>();
 
   get accounts(): Account[] {
     return this.portfolio?.accounts ?? [];
   }
 
-  onAccountChange(val: string | number) {
-    if (val === '') {
+  onAccountChange(val: string | number | null) {
+    if (val === '' || val == null) {
       this.selectedAccountIdChange.emit(null);
       return;
     }
 
-    const id = typeof val === 'string' ? parseInt(val, 10) : val;
-    this.selectedAccountIdChange.emit(Number.isFinite(id) ? id : null);
+    this.selectedAccountIdChange.emit(String(val));
   }
 }
